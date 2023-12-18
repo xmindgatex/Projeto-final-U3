@@ -1,0 +1,7 @@
+Integrantes
+
+Kaio Cesar de Sousa Pinheiro
+
+Para reproduzir o projeto:
+
+g++ -o procimg Projeto.cpp
