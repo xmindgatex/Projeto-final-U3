@@ -1,0 +1,144 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+
+class Product {
+public:
+    Product(const std::string& name, int quantity) : name(name), quantity(quantity) {}
+
+    std::string getName() const {
+        return name;
+    }
+
+    int getQuantity() const {
+        return quantity;
+    }
+
+    void increaseQuantity(int amount) {
+        quantity += amount;
+    }
+
+    void decreaseQuantity(int amount) {
+        if (amount <= quantity) {
+            quantity -= amount;
+        } else {
+            std::cerr << "Error: Insufficient quantity to decrease.\n";
+        }
+    }
+
+private:
+    std::string name;
+    int quantity;
+};
+
+class StockManager {
+public:
+    void addProduct(const std::string& name, int quantity) {
+        products.push_back(Product(name, quantity));
+    }
+
+    void removeProduct(const std::string& name) {
+        auto it = findProduct(name);
+        if (it != products.end()) {
+            products.erase(it);
+        } else {
+            std::cerr << "Error: Product not found.\n";
+        }
+    }
+
+    void displayStock() const {
+        std::cout << "Stock:\n";
+        for (const auto& product : products) {
+            std::cout << product.getName() << " - Quantity: " << product.getQuantity() << "\n";
+        }
+    }
+
+    void saveStockToFile(const std::string& filename) const {
+        std::ofstream file(filename);
+        if (file.is_open()) {
+            for (const auto& product : products) {
+                file << product.getName() << "," << product.getQuantity() << "\n";
+            }
+            file.close();
+        } else {
+            std::cerr << "Error: Unable to open file for writing.\n";
+        }
+    }
+
+    void loadStockFromFile(const std::string& filename) {
+        products.clear();
+        std::ifstream file(filename);
+        if (file.is_open()) {
+            std::string line;
+            while (std::getline(file, line)) {
+                size_t commaPos = line.find(",");
+                if (commaPos != std::string::npos) {
+                    std::string name = line.substr(0, commaPos);
+                    int quantity = std::stoi(line.substr(commaPos + 1));
+                    products.push_back(Product(name, quantity));
+                }
+            }
+            file.close();
+        } else {
+            std::cerr << "Warning: File not found. Starting with an empty stock.\n";
+        }
+    }
+
+private:
+    std::vector<Product> products;
+
+    std::vector<Product>::iterator findProduct(const std::string& name) {
+        return std::find_if(products.begin(), products.end(), [name](const Product& p) {
+            return p.getName() == name;
+        });
+    }
+};
+
+int main() {
+    StockManager stockManager;
+    stockManager.loadStockFromFile("stock.txt"); // Carrega o estoque do arquivo, se existir
+
+    int choice;
+    do {
+        std::cout << "\nMenu:\n";
+        std::cout << "1. Adicionar Produto\n";
+        std::cout << "2. Remover Produto\n";
+        std::cout << "3. Exibir Estoque\n";
+        std::cout << "4. Salvar e Sair\n";
+        std::cout << "Escolha: ";
+        std::cin >> choice;
+
+        switch (choice) {
+            case 1: {
+                std::cin.ignore(); // Limpa o buffer do teclado
+                std::string name;
+                int quantity;
+                std::cout << "Digite o nome do produto: ";
+                std::getline(std::cin, name);
+                std::cout << "Digite a quantidade inicial: ";
+                std::cin >> quantity;
+                stockManager.addProduct(name, quantity);
+                break;
+            }
+            case 2: {
+                std::cin.ignore(); // Limpa o buffer do teclado
+                std::string name;
+                std::cout << "Digite o nome do produto a ser removido: ";
+                std::getline(std::cin, name);
+                stockManager.removeProduct(name);
+                break;
+            }
+            case 3:
+                stockManager.displayStock();
+                break;
+            case 4:
+                stockManager.saveStockToFile("stock.txt"); // Salva o estoque no arquivo antes de sair
+                break;
+            default:
+                std::cout << "Opção inválida. Tente novamente.\n";
+        }
+    } while (choice != 4);
+
+    return 0;
+}
