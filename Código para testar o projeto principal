@@ -1,0 +1,26 @@
+#include <iostream>
+#include <string>
+
+int main() {
+    // Solicita ao usuário que digite seu nome
+    std::cout << "Digite seu nome: ";
+    std::string nome;
+    std::getline(std::cin, nome);
+
+    // Exibe uma mensagem de boas-vindas personalizada
+    std::cout << "Bem-vindo, " << nome << "!\n";
+
+    // Solicita ao usuário que digite sua idade
+    int idade;
+    std::cout << "Digite sua idade: ";
+    std::cin >> idade;
+
+    // Verifica se o usuário é maior de idade
+    if (idade >= 18) {
+        std::cout << "Você é maior de idade.\n";
+    } else {
+        std::cout << "Você é menor de idade.\n";
+    }
+
+    return 0;
+}
