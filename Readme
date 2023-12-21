@@ -5,3 +5,99 @@ Kaio Cesar de Sousa Pinheiro
 Para reproduzir o projeto:
 
 g++ -o procimg Projeto.cpp
+
+Comandos que precisam funcionar:
+
+Adicionar Produto (Opção 1):
+
+case 1: {
+    std::cin.ignore(); // Limpa o buffer do teclado
+    std::string name;
+    int quantity;
+    std::cout << "Digite o nome do produto: ";
+    std::getline(std::cin, name);
+    std::cout << "Digite a quantidade inicial: ";
+    std::cin >> quantity;
+    stockManager.addProduct(name, quantity);
+    break;
+}
+
+Remover Produto (Opção 2):
+
+case 2: {
+    std::cin.ignore(); // Limpa o buffer do teclado
+    std::string name;
+    std::cout << "Digite o nome do produto a ser removido: ";
+    std::getline(std::cin, name);
+    stockManager.removeProduct(name);
+    break;
+}
+
+Exibir Estoque (Opção 3):
+
+Copy code
+case 3:
+    stockManager.displayStock();
+    break;
+
+Salvar e Sair (Opção 4):
+
+case 4:
+    stockManager.saveStockToFile("stock.txt"); // Salva o estoque no arquivo antes de sair
+    break;
+
+Testes que precisam passar:
+
+Adicionar Produto e Exibir Estoque:
+
+Adicione alguns produtos ao estoque.
+Exiba o estoque para garantir que os produtos foram adicionados corretamente.
+cpp
+stockManager.addProduct("Produto1", 10);
+stockManager.addProduct("Produto2", 5);
+stockManager.displayStock();
+
+Remover Produto e Exibir Estoque:
+
+Adicione alguns produtos ao estoque.
+Remova um produto do estoque.
+Exiba o estoque para garantir que o produto foi removido corretamente.
+
+stockManager.addProduct("Produto1", 10);
+stockManager.addProduct("Produto2", 5);
+stockManager.removeProduct("Produto1");
+stockManager.displayStock();
+
+Salvar e Carregar Estoque:
+
+Adicione alguns produtos ao estoque.
+Salve o estoque em um arquivo.
+Crie um novo objeto StockManager e carregue o estoque do arquivo.
+Exiba o estoque carregado para garantir que a funcionalidade de salvar e carregar esteja correta.
+
+stockManager.addProduct("Produto1", 10);
+stockManager.addProduct("Produto2", 5);
+stockManager.saveStockToFile("test_stock.txt");
+
+StockManager loadedStockManager;
+loadedStockManager.loadStockFromFile("test_stock.txt");
+loadedStockManager.displayStock();
+
+Manuseio de Erros:
+
+Teste a resposta do programa a entradas inválidas.
+Tente remover um produto que não está no estoque.
+Certifique-se de que o programa lida corretamente com situações de erro.
+
+// Tente remover um produto que não está no estoque
+stockManager.removeProduct("ProdutoInexistente");
+
+// Teste de entrada inválida para quantidade
+std::cin.ignore();
+std::string name;
+int quantity;
+std::cout << "Digite o nome do produto: ";
+std::getline(std::cin, name);
+std::cout << "Digite uma quantidade inválida: ";
+std::cin >> quantity;
+stockManager.addProduct(name, quantity);
