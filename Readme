@@ -35,7 +35,6 @@ case 2: {
 
 Exibir Estoque (Opção 3):
 
-Copy code
 case 3:
     stockManager.displayStock();
     break;
